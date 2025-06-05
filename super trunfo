@@ -1,1 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
+// Estrutura para representar uma carta (aluno)
+typedef struct {
+    char nome[50];
+    int idade;
+    float altura;
+    int matricula;
+} CartaAluno;
+
+// Exibe uma carta (dados do aluno)
+void mostrarCarta(CartaAluno c) {
+    printf("Nome: %s\n", c.nome);
+    printf("Idade: %d\n", c.idade);
+    printf("Altura: %.2f\n", c.altura);
+    printf("Matrícula: %d\n", c.matricula);
+}
+
+// Compara os atributos
+void compararCartas(CartaAluno jogador, CartaAluno computador, int escolha) {
+    printf("\n--- Sua Carta ---\n");
+    mostrarCarta(jogador);
+    
+    printf("\n--- Carta do Computador ---\n");
+    mostrarCarta(computador);
+
+    int venceu = 0;
+
+    if (escolha == 1) { // Idade
+        if (jogador.idade > computador.idade)
+            venceu = 1;
+        else if (jogador.idade < computador.idade)
+            venceu = -1;
+    } else if (escolha == 2) { // Altura
+        if (jogador.altura > computador.altura)
+            venceu = 1;
+        else if (jogador.altura < computador.altura)
+            venceu = -1;
+    } else if (escolha == 3) { // Matrícula (quanto menor, melhor)
+        if (jogador.matricula < computador.matricula)
+            venceu = 1;
+        else if (jogador.matricula > computador.matricula)
+            venceu = -1;
+    }
+
+    if (venceu == 1) {
+        printf("\n🎉 Você venceu a rodada!\n");
+    } else if (venceu == -1) {
+        printf("\n💻 O computador venceu a rodada!\n");
+    } else {
+        printf("\n🤝 Empate!\n");
+    }
+}
+
+int main() {
+    srand(time(NULL));
+
+    // Baralho com algumas cartas (alunos fictícios)
+    CartaAluno baralho[5] = {
+        {"Ana Costa", 20, 1.65, 2021001},
+        {"Bruno Lima", 22, 1.80, 2020990},
+        {"Carla Souza", 19, 1.70, 2021045},
+        {"Daniel Rocha", 23, 1.75, 2020875},
+        {"Elisa Martins", 21, 1.60, 2021110}
+    };
+
+    int indiceJogador = rand() % 5;
+    int indiceComputador;
+
+    // Garante que as cartas sejam diferentes
+    do {
+        indiceComputador = rand() % 5;
+    } while (indiceComputador == indiceJogador);
+
+    CartaAluno cartaJogador = baralho[indiceJogador];
+    CartaAluno cartaComputador = baralho[indiceComputador];
+
+    printf("=== SUPER TRUNFO: ALUNOS ===\n\n");
+
+    printf("Sua carta:\n");
+    mostrarCarta(cartaJogador);
+
+    printf("\nEscolha um atributo para competir:\n");
+    printf("1 - Idade\n");
+    printf("2 - Altura\n");
+    printf("3 - Matrícula (menor vence)\n");
+    printf("Digite o número do atributo: ");
+
+    int escolha;
+    scanf("%d", &escolha);
+
+    compararCartas(cartaJogador, cartaComputador, escolha);
+
+    return 0;
+}
